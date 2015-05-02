@@ -16,6 +16,8 @@ public class CMain {
 			utils.infoMsg("Debug mode active");
 		}
 		
+		CConfigParser configData = new CConfigParser();
+		
 		// Start the main server process
 		new CServer(1234);
 		
