@@ -8,10 +8,10 @@ import jld.Exceptions.ConfigParserNotInitializedException;
 import jld.Server.utils.utils;
 
 public class CConfigParser {
-	File mConfigFile = new File("config.cfg");
-	Scanner mReader;
-	int mPort = -1;
-	int mQueueLength = -1;
+	private File mConfigFile = new File("config.cfg");
+	private Scanner mReader;
+	private int mPort = -1;
+	private int mQueueLength = -1;
 	
 	public CConfigParser(){
 		try {
@@ -24,10 +24,12 @@ public class CConfigParser {
 	
 	private void readConfig(){
 		while(mReader.hasNext()){
-			if(mReader.next() == "Port"){
+			//System.out.println(mReader.next());
+			String tag = mReader.next();
+			if(tag.equalsIgnoreCase("Port")){
 				mReader.next();
 				mPort = mReader.nextInt();
-			} else if(mReader.next() == "QueueLength"){
+			} else if(tag.equalsIgnoreCase("QueueLength")){
 				mReader.next();
 				mQueueLength = mReader.nextInt();
 			}
@@ -43,7 +45,7 @@ public class CConfigParser {
 		return mPort;
 	}
 	
-	public int queueLength() throws ConfigParserNotInitializedException{
+	public int getQueueLength() throws ConfigParserNotInitializedException{
 		if(mQueueLength == -1) throw new ConfigParserNotInitializedException();
 		return mQueueLength;
 	}

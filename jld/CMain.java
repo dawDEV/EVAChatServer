@@ -1,5 +1,8 @@
 package jld;
 
+import java.io.File;
+
+import jld.Exceptions.ConfigParserNotInitializedException;
 import jld.Server.CServer;
 import jld.Server.utils.utils;
 
@@ -17,12 +20,14 @@ public class CMain {
 		}
 		
 		CConfigParser configData = new CConfigParser();
-		
-		// Start the main server process
-		new CServer(1234);
-		
-		
-	}
+		try {
+			// Start the server
+			new CServer(configData.getPort());
+		} catch (ConfigParserNotInitializedException e) {
+			utils.errorMsg("Fehler beim Auslesen der Konfigurationsdatei.");
+			System.exit(0);
+		}
+}
 
 	public static boolean isOnDebug() {
 		return debugMode;

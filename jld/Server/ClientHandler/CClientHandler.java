@@ -51,7 +51,6 @@ public class CClientHandler extends Thread {
 		 * 3. a) if userfile is not available or password is wrong -> Deny login
 		 * 3. b) else: Allow login
 		 */
-		
 		try {
 			
 			mOutput.println("Please give me your username...");
@@ -60,12 +59,9 @@ public class CClientHandler extends Thread {
 				char buffer[] = new char[200];
 				int length = 0;
 				length = mInput.read(buffer, 0, 200);
-				/*try{
-					length = mInput.read(buffer, 0, 200);
-				} catch(SocketTimeoutException ste){
-					notifyDisconnect();
-					return;
-				}*/
+				/* length = -1 => Nutzer hat die Verbindung getrennt.
+				 * length >= 1 => Nachrichten stehen an.
+				 */
 				if(length == -1){
 					notifyDisconnect();
 					return;
