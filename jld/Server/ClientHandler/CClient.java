@@ -8,6 +8,7 @@ import java.net.InetAddress;
 public class CClient {
 	private String mUsername;
 	private InetAddress mIp;
+	private String mCurrentChannel;
 
 	public CClient(String username, InetAddress ip) {
 		mUsername = username;

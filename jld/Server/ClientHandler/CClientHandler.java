@@ -23,7 +23,7 @@ public class CClientHandler extends Thread {
 		mServer = server;
 		mSocket = socket;
 		try {
-			mSocket.setSoTimeout(1000000);
+			mSocket.setSoTimeout(100000000);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
 		}
@@ -52,13 +52,11 @@ public class CClientHandler extends Thread {
 		 * 3. b) else: Allow login
 		 */
 		try {
-			
-			mOutput.println("Please give me your username...");
-			mOutput.flush();
 			while(true){
-				char buffer[] = new char[200];
+				char buffer[] = new char[256];
 				int length = 0;
-				length = mInput.read(buffer, 0, 200);
+				length = mInput.read(buffer, 0, 256);
+				
 				/* length = -1 => Nutzer hat die Verbindung getrennt.
 				 * length >= 1 => Nachrichten stehen an.
 				 */
@@ -67,14 +65,21 @@ public class CClientHandler extends Thread {
 					return;
 				}
 				String msg = String.valueOf(buffer);
-				msg = msg.substring(0, length - 2);
+				
+				// Packetstruktur prüfen
+				if(!CClientPacket.checkPacket(msg)) continue;
+				
+				// Packet in Einzelteile zerlegen
+				String type = msg.substring(0, 6);
+			
+				
 				utils.infoMsg("Got message -> " + msg);
-				if(msg.compareTo("Hello") == 0){
-					mOutput.println("Hello you anonymous");
-					mOutput.flush();
-				}
+				utils.infoMsg("Got type -> " + type);
+				
+				
+				
 			}	
-		}catch (IOException e) {
+		} catch (IOException e) {
 			notifyDisconnect();
 		}
 	}
