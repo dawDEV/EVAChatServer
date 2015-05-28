@@ -70,14 +70,11 @@ public class CClientHandler extends Thread {
 				if(!CClientPacket.checkPacket(msg)) continue;
 				
 				// Packet in Einzelteile zerlegen
-				String type = msg.substring(0, 6);
-			
+				msg = msg.substring(0, length -2);
+				
+				CClientPacket packet = new CClientPacket(msg);
 				
 				utils.infoMsg("Got message -> " + msg);
-				utils.infoMsg("Got type -> " + type);
-				
-				
-				
 			}	
 		} catch (IOException e) {
 			notifyDisconnect();

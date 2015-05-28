@@ -27,4 +27,12 @@ public class utils {
 		System.out.print(msg);
 		logger.write(msg);
 	}
+	
+	public static boolean isNumber(String toCheck){
+		for(int i = 0; i < toCheck.length(); ++i){
+			char c = toCheck.charAt(i);
+			if(c != '0' && c != '1' && c != '2' && c != '3' && c != '4' && c != '5' && c != '6' && c != '7' && c != '8' && c != '9') return false;
+		}
+		return true;
+	}
 }
