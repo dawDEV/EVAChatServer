@@ -1,6 +1,9 @@
 package jld.Server.utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import jld.CMain;
 
 /**
@@ -8,22 +11,22 @@ import jld.CMain;
  */
 public class utils {
 	static CLogger logger = new CLogger(new File("log.txt"));
-	
+	static SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("dd.MM.YYYY HH:mm:ss");
 	public static void debugMsg(String msg) {
 		if (CMain.isOnDebug())
-			msg = String.format("%-10s%s%n", "[DEBUG]:", msg);
+			msg = String.format("%s %-10s%s%n", simpleDateFormatter.format(new Date()), "[DEBUG]:", msg);
 			System.out.print(msg);
 			logger.write(msg);
 	}
 
 	public static void errorMsg(String msg) {
-		msg = String.format("%-10s%s%n", "[ERROR]:", msg);
+		msg = String.format("%s %-10s%s%n", simpleDateFormatter.format(new Date()), "[ERROR]:", msg);
 		System.out.print(msg);
 		logger.write(msg);
 	}
 
 	public static void infoMsg(String msg) {
-		msg = String.format("%-10s%s%n", "[INFO]:", msg);
+		msg = String.format("%s %-10s%s%n", simpleDateFormatter.format(new Date()), "[INFO]:", msg);
 		System.out.print(msg);
 		logger.write(msg);
 	}

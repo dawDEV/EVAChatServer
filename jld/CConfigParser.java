@@ -18,6 +18,7 @@ public class CConfigParser {
 			mReader = new Scanner(mConfigFile);
 		} catch (FileNotFoundException e) {
 			utils.errorMsg("Fehlerhafte Konfiguration. [config.cfg fehlt]");
+			System.exit(0);
 		}
 		readConfig();
 	}

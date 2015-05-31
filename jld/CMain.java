@@ -1,7 +1,5 @@
 package jld;
 
-import java.io.File;
-
 import jld.Exceptions.ConfigParserNotInitializedException;
 import jld.Server.CServer;
 import jld.Server.utils.utils;
