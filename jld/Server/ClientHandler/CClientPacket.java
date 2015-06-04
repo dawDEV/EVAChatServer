@@ -88,8 +88,17 @@ public class CClientPacket {
 		/*
 		 * Param1 zur Parameterliste hinzufügen
 		 */
-		mParameters.add(mPacket.substring(posPointer+MESSAGE_LENGTH_LENGTH, posPointer + MESSAGE_LENGTH_LENGTH + param1Length - 1));
-		System.out.println("Nachricht: " + mParameters.get(0));
+		mParameters.add(mPacket.substring(posPointer+MESSAGE_LENGTH_LENGTH, posPointer + MESSAGE_LENGTH_LENGTH + param1Length));
+		System.out.println("Message: " + mParameters.get(0));
+		
+		/*
+		 * Alle Clients im Channel holen die Nachricht senden mit dem Absender des eigenen Users 
+		 */
+		ArrayList<CClientHandler> clientsInSameChannel = mCaller.getServer().getClientsOfChannel(mCaller.getClient().getCurrentChannel());
+		for(int i = 0; i < clientsInSameChannel.size(); i++){
+			if(clientsInSameChannel.get(i).equals(mCaller)) continue;
+			clientsInSameChannel.get(i).sendMessage(mParameters.get(0), mCaller.getClient());
+		}
 	}
 	
 	/**

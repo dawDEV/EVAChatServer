@@ -106,14 +106,23 @@ public class CClientHandler extends Thread {
 		// Siehe Packet Structure (MAX_PACKET_LENGTH - PacketHeader - Parameter1_laenge_laenge - Parameter1_laenge - Parameter2_laenge_laenge)
 		final int MAX_MESSAGE_LENGTH = 245 - sender.getUsername().length();
 		assert(msg.length() <= MAX_MESSAGE_LENGTH);
-		mOutput.println("0x0004" + makeValidParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidParameterLength(msg.length()) + msg);
+		mOutput.println("0x0004" + makeValidUserParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidMessageParameterLength(msg.length()) + msg);
 		mOutput.flush();
 	}
 	
-	public String makeValidParameterLength(int length){
+	public String makeValidMessageParameterLength(int length){
+		assert(length < 256);
 		if(length < 10)
 			return "00" + length;
 		else if(length < 100)
+			return "0" + length;
+		else
+			return Integer.toString(length);
+	}
+	
+	public String makeValidUserParameterLength(int length){
+		assert(length < 64);
+		if(length < 10)
 			return "0" + length;
 		else
 			return Integer.toString(length);
