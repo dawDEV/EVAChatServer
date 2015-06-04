@@ -34,11 +34,13 @@ public class CClientHandler extends Thread {
 		} catch (IOException e) {
 			utils.errorMsg("Error when getting IO stream of new client");
 		}
-		mClient = new CClient("", mSocket.getInetAddress());
+		mClient = new CClient("", mSocket.getInetAddress(), null);
 		this.start();
 	}
 	
-	
+	public CServer getServer() {
+		return mServer;
+	}
 	protected void setClient(CClient client) {
 		mClient = client;
 	}
@@ -78,7 +80,7 @@ public class CClientHandler extends Thread {
 				
 				CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 				packet.handlePacket();
-				utils.debugMsg("Got message -> " + msg);
+				utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
 			}	
 		} catch (IOException e) {
 			notifyDisconnect();
@@ -86,6 +88,7 @@ public class CClientHandler extends Thread {
 	}
 
 	private void notifyDisconnect() {
+		mClient.disconnect();
 		mServer.clientDisconnected(this);
 		try {
 			mSocket.close();
@@ -97,6 +100,23 @@ public class CClientHandler extends Thread {
 	protected void informRegisterFailed(){
 		mOutput.print("0x0002");
 		mOutput.flush();
+	}
+	
+	public void sendMessage(String msg, CClient sender){
+		// Siehe Packet Structure (MAX_PACKET_LENGTH - PacketHeader - Parameter1_laenge_laenge - Parameter1_laenge - Parameter2_laenge_laenge)
+		final int MAX_MESSAGE_LENGTH = 245 - sender.getUsername().length();
+		assert(msg.length() <= MAX_MESSAGE_LENGTH);
+		mOutput.println("0x0004" + makeValidParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidParameterLength(msg.length()) + msg);
+		mOutput.flush();
+	}
+	
+	public String makeValidParameterLength(int length){
+		if(length < 10)
+			return "00" + length;
+		else if(length < 100)
+			return "0" + length;
+		else
+			return Integer.toString(length);
 	}
 }
 

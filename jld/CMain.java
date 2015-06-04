@@ -20,7 +20,7 @@ public class CMain {
 		CConfigParser configData = new CConfigParser();
 		try {
 			// Start the server
-			new CServer(configData.getPort());
+			new CServer(configData.getPort(), configData.getDefaultChannel());
 			utils.infoMsg("Default channel: " + configData.getDefaultChannel()) ;
 		} catch (ConfigParserNotInitializedException e) {
 			utils.errorMsg("Fehler beim Auslesen der Konfigurationsdatei.");

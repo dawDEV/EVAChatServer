@@ -13,10 +13,10 @@ public class utils {
 	static CLogger logger = new CLogger(new File("log.txt"));
 	static SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("dd.MM.YYYY HH:mm:ss");
 	public static void debugMsg(String msg) {
-		if (CMain.isOnDebug())
-			msg = String.format("%s %-10s%s%n", simpleDateFormatter.format(new Date()), "[DEBUG]:", msg);
-			System.out.print(msg);
-			logger.write(msg);
+		if (!CMain.isOnDebug()) return;
+		msg = String.format("%s %-10s%s%n", simpleDateFormatter.format(new Date()), "[DEBUG]:", msg);
+		System.out.print(msg);
+		logger.write(msg);
 	}
 
 	public static void errorMsg(String msg) {

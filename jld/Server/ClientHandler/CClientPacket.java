@@ -8,8 +8,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.lang.model.type.NullType;
-
 import jld.Server.utils.utils;
 
 public class CClientPacket {
@@ -61,7 +59,7 @@ public class CClientPacket {
 	}
 	
 	private void processMessage(){
-		int MIN_PACKET_LENGTH = 8;	// Da 1-parametrig. (6 Digits + 2 Digits)
+		int MIN_PACKET_LENGTH = 9;	// Da 1-parametrig. (6 Digits + 3 Digits)
 		final int MESSAGE_LENGTH_LENGTH = 3;
 		if(mPacket.length() < MIN_PACKET_LENGTH) return;
 		/*
@@ -90,8 +88,7 @@ public class CClientPacket {
 		/*
 		 * Param1 zur Parameterliste hinzufügen
 		 */
-		mParameters.add(mPacket.substring(posPointer+2, posPointer + 2 + param1Length));
-		
+		mParameters.add(mPacket.substring(posPointer+MESSAGE_LENGTH_LENGTH, posPointer + MESSAGE_LENGTH_LENGTH + param1Length - 1));
 		System.out.println("Nachricht: " + mParameters.get(0));
 	}
 	
@@ -163,7 +160,6 @@ public class CClientPacket {
 			try{
 				Scanner userfileReader = new Scanner(userfile);				
 				String pwdToCheck = userfileReader.nextLine();
-				System.out.println("password given: " + mParameters.get(1) + "\nPassword:" + pwdToCheck);
 				if(password.equals(pwdToCheck)){
 					userfileReader.close();
 					return true;
@@ -193,13 +189,14 @@ public class CClientPacket {
 					 */
 					userfile.createNewFile();
 					PrintWriter userfileWriter = new PrintWriter(userfile);
+					mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 					userfileWriter.println(mParameters.get(1));
 					userfileWriter.flush();
 					userfileWriter.close();
+					utils.infoMsg("User " + mCaller.getClient().getUsername() + " just registered from " + mIpOfClient.toString() + "!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
 			} else{
 				mCaller.informRegisterFailed();
 			}
@@ -207,7 +204,7 @@ public class CClientPacket {
 	}
 	private void perform_login(){
 		if(check_login(mParameters.get(0), mParameters.get(1))){
-			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient));
+			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");
 		} else{
 			utils.infoMsg("Login for " + mParameters.get(0) + " failed from " + mIpOfClient.toString());
