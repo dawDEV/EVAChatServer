@@ -12,6 +12,7 @@ public class CConfigParser {
 	private Scanner mReader;
 	private int mPort = -1;
 	private int mQueueLength = -1;
+	private String mDefaultChannel = "";
 	
 	public CConfigParser(){
 		try {
@@ -23,6 +24,14 @@ public class CConfigParser {
 		readConfig();
 	}
 	
+	public String getDefaultChannel() {
+		return mDefaultChannel;
+	}
+
+	public void setDefaultChannel(String defaultChannel) {
+		mDefaultChannel = defaultChannel;
+	}
+
 	private void readConfig(){
 		while(mReader.hasNext()){
 			//System.out.println(mReader.next());
@@ -33,6 +42,9 @@ public class CConfigParser {
 			} else if(tag.equalsIgnoreCase("QueueLength")){
 				mReader.next();
 				mQueueLength = mReader.nextInt();
+			} else if(tag.equalsIgnoreCase("DefaultChannel")){
+				mReader.next();
+				mDefaultChannel = mReader.next();
 			}
 		}
 		if(mPort == -1 && mQueueLength == -1){

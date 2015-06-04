@@ -17,7 +17,7 @@ public class CClientHandler extends Thread {
 	private Socket mSocket;
 	private BufferedReader mInput;
 	private PrintWriter mOutput;
-	private CClient mClient;
+	private CClient mClient = null;
 
 	public CClientHandler(CServer server, Socket socket) {
 		mServer = server;
@@ -38,6 +38,10 @@ public class CClientHandler extends Thread {
 		this.start();
 	}
 	
+	
+	protected void setClient(CClient client) {
+		mClient = client;
+	}
 	public CClient getClient() {
 		return mClient;
 	}
@@ -66,15 +70,15 @@ public class CClientHandler extends Thread {
 				}
 				String msg = String.valueOf(buffer);
 				
-				// Packetstruktur prüfen
+				// Packetstruktur pruefen
 				if(!CClientPacket.checkPacket(msg)) continue;
 				
 				// Packet in Einzelteile zerlegen
 				msg = msg.substring(0, length -2);
 				
-				CClientPacket packet = new CClientPacket(msg);
-				
-				utils.infoMsg("Got message -> " + msg);
+				CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
+				packet.handlePacket();
+				utils.debugMsg("Got message -> " + msg);
 			}	
 		} catch (IOException e) {
 			notifyDisconnect();
@@ -89,4 +93,17 @@ public class CClientHandler extends Thread {
 			utils.errorMsg("Error when closing socket is disconnected client");
 		}
 	}
+	
+	protected void informRegisterFailed(){
+		mOutput.print("0x0002");
+		mOutput.flush();
+	}
+}
+
+class ServerPacketHeaders{
+	public final String LOGIN_REJECTED = "0x0000";
+	public final String LOGIN_SUCCESSFUL = "0x0001";
+	public final String REGISTER_REJECTED = "0x0002";
+	public final String REGISTER_SUCCESSFUL = "0x0003";
+	public final String MESSAGE = "0x0004";
 }

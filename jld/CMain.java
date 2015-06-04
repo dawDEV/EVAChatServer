@@ -21,6 +21,7 @@ public class CMain {
 		try {
 			// Start the server
 			new CServer(configData.getPort());
+			utils.infoMsg("Default channel: " + configData.getDefaultChannel()) ;
 		} catch (ConfigParserNotInitializedException e) {
 			utils.errorMsg("Fehler beim Auslesen der Konfigurationsdatei.");
 			System.exit(0);

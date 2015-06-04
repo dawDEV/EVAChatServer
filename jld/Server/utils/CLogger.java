@@ -9,7 +9,7 @@ public class CLogger {
 	
 	public CLogger(File file){
 		try {
-			mWriter = new FileWriter(file);
+			mWriter = new FileWriter(file, true);
 		} catch (IOException e) {
 			System.out.println("Critical file writing exception");
 			System.exit(0);
