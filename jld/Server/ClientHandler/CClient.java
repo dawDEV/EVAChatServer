@@ -43,9 +43,10 @@ public class CClient {
 			mCurrentChannel.leaveChannel(this);
 			mCurrentChannel = channel;
 			channel.joinChannel(this);
+		} else{
+			mCurrentChannel = channel;
+			channel.joinChannel(this);
 		}
-		mCurrentChannel = channel;
-		channel.joinChannel(this);
 	}
 	
 	public void disconnect(){

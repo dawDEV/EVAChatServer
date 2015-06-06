@@ -7,10 +7,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import jld.Exceptions.InvalidPacketException;
 import jld.Exceptions.InvalidPacketHeaderException;
 import jld.Server.CServer;
+import jld.Server.Channels.CChannel;
 import jld.Server.utils.utils;
 
 /**
@@ -118,9 +120,42 @@ public class CClientHandler extends Thread {
 				}
 			}
 		} catch (InvalidPacketException e) {
-			System.out.println("Message longer then intended");
+			/* Wird im Prinzip nie erreicht, da die Nachricht zur Not auf mehrere Paket aufgesplittet wird */
 			e.printStackTrace();
 		}
+	}
+	
+	public void onMessageReceived(String message){
+		if(message.startsWith("/join ")){
+			/*
+			 * Fall: /join zum Betreten eines anderen Channels wird ausgeführt.
+			 */
+			Scanner sc = new Scanner(message.substring(5));
+			if(sc.hasNext() ){
+				String channelName = sc.next();
+				System.out.println(channelName);
+				CChannel channelToJoin = mServer.getChannel(channelName);
+				if(channelToJoin != null){
+					mClient.setCurrentChannel(channelToJoin);
+				} else {
+					sendMessage("Channel existiert nicht.", mServer.getServerClient());
+				}
+			} else{
+				sendMessage("Benutzung: /join [Channelname]", mServer.getServerClient());
+			}
+		} else{
+			/*
+			 * Fall: Kein Befehl wird ausgeführt.
+			 * Aktion: Alle Clients im Channel holen die Nachricht senden mit dem Absender des eigenen Users 
+			 */
+			ArrayList<CClientHandler> clientsInSameChannel = mServer.getClientsOfChannel(mClient.getCurrentChannel());
+			for(int i = 0; i < clientsInSameChannel.size(); i++){
+				if(clientsInSameChannel.get(i).equals(this)) continue;
+				clientsInSameChannel.get(i).sendMessage(message, mClient);
+			}
+		}
+		
+		
 	}
 
 }

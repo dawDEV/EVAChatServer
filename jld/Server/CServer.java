@@ -6,6 +6,7 @@ import jld.Server.ClientHandler.CClient;
 import jld.Server.ClientHandler.CClientHandler;
 import jld.Server.utils.utils;
 
+import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -82,6 +83,18 @@ public class CServer extends Thread {
 			}
 		}
 		return clients;
+	}
+	
+	/**
+	 * Gibt den angeforderten Channel anhand seines Namens zurück.
+	 * @param Name des angeforderten Channels.
+	 * @return Den angeforderten Channel oder Null falls es den Channel nicht gibt.
+	 */
+	public CChannel getChannel(String name){
+		for(int i = 0; i < mChannels.length; i++){
+			if(mChannels[i].getName().toLowerCase().equals(name)) return mChannels[i];
+		}
+		return null;
 	}
 	
 	public CChannel getDefaultChannel(){

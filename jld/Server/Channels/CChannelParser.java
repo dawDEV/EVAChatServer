@@ -15,7 +15,7 @@ public abstract class CChannelParser {
 			ArrayList<CChannel> channels = new ArrayList<CChannel>();
 			Scanner channelReader = new Scanner(channelFile);
 			while(channelReader.hasNextLine()){
-				channels.add(new CChannel(channelReader.nextLine(), server));
+				channels.add(new CChannel(channelReader.nextLine().toLowerCase(), server));
 			}
 			channelReader.close();
 			CChannel[] channelsArr = new CChannel[channels.size()];

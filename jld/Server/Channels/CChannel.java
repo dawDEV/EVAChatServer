@@ -22,6 +22,7 @@ public class CChannel {
 	public void joinChannel(CClient user){
 		ArrayList<CClientHandler> clienthandlers = mServer.getClientsOfChannel(this);
 		for(CClientHandler ch : clienthandlers){
+			if(ch.getClient() == user) continue;
 			ch.sendMessage("User " + user.getUsername() + " joined.", mServer.getServerClient());
 		}
 	}
@@ -29,6 +30,7 @@ public class CChannel {
 	public void leaveChannel(CClient user){
 		ArrayList<CClientHandler> clienthandlers = mServer.getClientsOfChannel(this);
 		for(CClientHandler ch : clienthandlers){
+			if(ch.getClient() == user) continue;
 			ch.sendMessage("User " + user.getUsername() + " left.", mServer.getServerClient());
 		}
 	}
