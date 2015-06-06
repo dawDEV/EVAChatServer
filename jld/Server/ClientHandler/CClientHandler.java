@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import jld.Exceptions.InvalidPacketException;
-import jld.Exceptions.InvalidPacketHeaderException;
 import jld.Server.CServer;
 import jld.Server.Channels.CChannel;
 import jld.Server.utils.utils;
@@ -143,6 +142,7 @@ public class CClientHandler extends Thread {
 			} else{
 				sendMessage("Benutzung: /join [Channelname]", mServer.getServerClient());
 			}
+			sc.close();
 		} else{
 			/*
 			 * Fall: Kein Befehl wird ausgeführt.

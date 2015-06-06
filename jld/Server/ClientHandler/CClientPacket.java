@@ -8,8 +8,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import jld.Exceptions.InvalidPacketException;
-import jld.Exceptions.InvalidPacketHeaderException;
 import jld.Server.utils.utils;
 
 public class CClientPacket {
@@ -184,8 +182,19 @@ public class CClientPacket {
 	private void perform_login(){
 		final String username = mParameters.get(0);
 		final String password = mParameters.get(1);
+		
 		if(check_login(username, password)){
 			// Login richtig
+			ArrayList<CClientHandler> connectedClients = mCaller.getServer().getConnectedClients();
+			for(int i = 0; i < connectedClients.size(); i++){
+				if(username.toLowerCase().equals(connectedClients.get(i).getClient().getUsername().toLowerCase())){
+					// User bereits eingelogged
+					new CServerPacket(CServerPacketHeaders.LOGIN_REJECTED).sendPacket(mCaller);
+					utils.infoMsg("Login for " + mParameters.get(0) + " failed from " + mIpOfClient.toString() + " (Reason: Already logged in)");
+					return;
+				}
+			}
+			// Alles ok!
 			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 			new CServerPacket(CServerPacketHeaders.LOGIN_SUCCESSFUL).sendPacket(mCaller);
 			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");

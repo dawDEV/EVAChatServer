@@ -6,7 +6,6 @@ import jld.Server.ClientHandler.CClient;
 import jld.Server.ClientHandler.CClientHandler;
 import jld.Server.utils.utils;
 
-import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -95,6 +94,9 @@ public class CServer extends Thread {
 			if(mChannels[i].getName().toLowerCase().equals(name)) return mChannels[i];
 		}
 		return null;
+	}
+	public ArrayList<CClientHandler> getConnectedClients() {
+		return mConnectedClients;
 	}
 	
 	public CChannel getDefaultChannel(){

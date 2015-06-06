@@ -1,9 +1,6 @@
 package jld.Server.ClientHandler;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import jld.Exceptions.InvalidPacketException;
-import jld.Exceptions.InvalidPacketHeaderException;
 
 public class CServerPacket {
 	/* 
