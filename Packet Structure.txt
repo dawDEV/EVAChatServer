@@ -1,0 +1,31 @@
+/**
+* Basic Packet Structure
+* v0.1
+* by Dorian Weidler
+*/
+Packet Example:
+0x000003dwe041234
+
+  Split into the relevant parts:
+  > 0x0000 03 dwe 04 1234
+  0x0000   Packetheader (Type of packet; in this case login)
+  03      Length of first parameter (in this case 3; MAX: 32)
+  dwe     First parameter (in this case username: dwe)
+  04      Length of second parameter (in this case 3; MAX: 64)
+  1234    Second parameter (in this case password: 1234)
+
+---------------------------------------------------------------------------
+General information:
+  Maximum length of a packet:   256 digits
+---------------------------------------------------------------------------
+Packetheaderlist (Client => Server):
+  0x0000   Login               2 Param   (username [length: 2 digits], password [length: 2 digits])
+  0x0001   Register            2 Param   (username [length: 2 digits], password [length: 2 digits])
+  0x0002   Message             1 Param   (message [length: 3 digits])
+---------------------------------------------------------------------------
+Packetheaderlist (Server => Client):
+  0x0000   Login rejected      0 Param
+  0x0001   Login successf.     0 Param
+  0x0002   Register rejected   0 Param
+  0x0003   Register succesf.   0 Param
+  0x0004   Message             2 Param   (sender [length: 2 bit], message [length: 3 digits])
