@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import jld.Exceptions.InvalidPacketException;
+import jld.Exceptions.InvalidPacketHeaderException;
 import jld.Server.utils.utils;
 
 public class CClientPacket {
@@ -184,11 +186,26 @@ public class CClientPacket {
 		} else return false;
 	}
 	
+	private void perform_login(){
+		final String username = mParameters.get(0);
+		final String password = mParameters.get(1);
+		if(check_login(username, password)){
+			// Login richtig
+			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
+			new CServerPacket(CServerPacketHeaders.LOGIN_SUCCESSFUL).sendPacket(mCaller);
+			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");
+		} else{
+			// Login falsch
+			new CServerPacket(CServerPacketHeaders.LOGIN_REJECTED).sendPacket(mCaller);
+			utils.infoMsg("Login for " + mParameters.get(0) + " failed from " + mIpOfClient.toString());
+		}
+	}
+	
 	private void perform_registration(){
 		if(mParameters.get(0).length() > 0){
 			// username ist größer als 0 Zeichen
 			File userfile = new File("logins/" + mParameters.get(0) + ".usr");
-			if(!userfile.exists()){
+			if(!userfile.exists() && !mParameters.get(0).toLowerCase().equals("system")){
 				// user gibt es noch nicht, Registration kann vollzogen werden
 				try {
 					/*
@@ -202,21 +219,14 @@ public class CClientPacket {
 					userfileWriter.println(mParameters.get(1));
 					userfileWriter.flush();
 					userfileWriter.close();
+					new CServerPacket(CServerPacketHeaders.REGISTER_SUCCESSFUL).sendPacket(mCaller);
 					utils.infoMsg("User " + mCaller.getClient().getUsername() + " just registered from " + mIpOfClient.toString() + "!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else{
-				mCaller.informRegisterFailed();
+				new CServerPacket(CServerPacketHeaders.REGISTER_REJECTED).sendPacket(mCaller);
 			}
-		}
-	}
-	private void perform_login(){
-		if(check_login(mParameters.get(0), mParameters.get(1))){
-			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
-			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");
-		} else{
-			utils.infoMsg("Login for " + mParameters.get(0) + " failed from " + mIpOfClient.toString());
 		}
 	}
 }

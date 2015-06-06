@@ -49,6 +49,8 @@ public class CClient {
 	}
 	
 	public void disconnect(){
-		mCurrentChannel.leaveChannel(this);
+		if(mValid){
+			mCurrentChannel.leaveChannel(this);
+		}
 	}
 }
