@@ -86,18 +86,16 @@ public class CClientPacket {
 		MIN_PACKET_LENGTH += param1Length;
 		if(mPacket.length() < MIN_PACKET_LENGTH) return;
 		/*
-		 * Param1 zur Parameterliste hinzufügen
+		 * Param1 zur Parameterliste hinzufï¿½gen
 		 */
 		mParameters.add(mPacket.substring(posPointer+MESSAGE_LENGTH_LENGTH, posPointer + MESSAGE_LENGTH_LENGTH + param1Length));
-		System.out.println("Message: " + mParameters.get(0));
-		
 		mCaller.onMessageReceived(mParameters.get(0));
 		
 		
 	}
 	
 	/**
-	 * Verarbeitet das aktuelle Objekt nach dem Login- oder Registerschema. Im Falle eines ungültigen Pakets wird das Paket verworfen.<br>
+	 * Verarbeitet das aktuelle Objekt nach dem Login- oder Registerschema. Im Falle eines ungï¿½ltigen Pakets wird das Paket verworfen.<br>
 	 * Beispiel:<br>
 	 * 		0x000003dwe0512345 =><br>
 	 * 		Username (param1):	dwe<br>
@@ -128,12 +126,11 @@ public class CClientPacket {
 		if(mPacket.length() < MIN_PACKET_LENGTH) return;
 		
 		/*
-		 * Param1 zur Parameterliste hinzufügen
+		 * Param1 zur Parameterliste hinzufï¿½gen
 		 */
 		mParameters.add(mPacket.substring(posPointer+2, posPointer + 2 + param1Length));
-		
 		/*
-		 * Analog zum ersten Schritt für den zweiten Parameter
+		 * Analog zum ersten Schritt fï¿½r den zweiten Parameter
 		 */
 		posPointer += param1Length + 2;
 		tmp = mPacket.substring(posPointer, posPointer+2);
@@ -141,11 +138,11 @@ public class CClientPacket {
 		int param2Length = Integer.valueOf(tmp);
 		MIN_PACKET_LENGTH += param2Length;
 		/*
-		 * Pruefen der Gesamtlaenge, diesmal auf Gleichheit und falls alles stimmt auch den zweiten Parameter hinzufügen.
+		 * Pruefen der Gesamtlaenge, diesmal auf Gleichheit und falls alles stimmt auch den zweiten Parameter hinzufï¿½gen.
 		 */
 		if(mPacket.length() != MIN_PACKET_LENGTH) return;
 		mParameters.add(mPacket.substring(posPointer+2, posPointer + 2 + param2Length));
-		
+		System.out.println(posPointer+2);
 		switch(type){
 			case LOGIN_TYPE:
 				perform_login();
@@ -172,7 +169,7 @@ public class CClientPacket {
 					return false;
 				}
 			} catch(FileNotFoundException e){
-				// Wird niemals erreicht, außer die Datei wird während des Lesevorgangs gelöscht.
+				// Wird niemals erreicht, auï¿½er die Datei wird wï¿½hrend des Lesevorgangs gelï¿½scht.
 				e.printStackTrace();
 				return false;
 			}
@@ -182,10 +179,10 @@ public class CClientPacket {
 	private void perform_login(){
 		final String username = mParameters.get(0);
 		final String password = mParameters.get(1);
-		
 		if(check_login(username, password)){
 			// Login richtig
 			ArrayList<CClientHandler> connectedClients = mCaller.getServer().getConnectedClients();
+			
 			for(int i = 0; i < connectedClients.size(); i++){
 				if(username.toLowerCase().equals(connectedClients.get(i).getClient().getUsername().toLowerCase())){
 					// User bereits eingelogged
@@ -207,7 +204,7 @@ public class CClientPacket {
 	
 	private void perform_registration(){
 		if(mParameters.get(0).length() > 0){
-			// username ist größer als 0 Zeichen
+			// username ist grï¿½ï¿½er als 0 Zeichen
 			File userfile = new File("logins/" + mParameters.get(0) + ".usr");
 			if(!userfile.exists() && !mParameters.get(0).toLowerCase().equals("system")){
 				// user gibt es noch nicht, Registration kann vollzogen werden

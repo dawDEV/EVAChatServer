@@ -35,7 +35,6 @@ public class CClientHandler extends Thread {
 		try {
 			mInput = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			mOutput = new PrintWriter(mSocket.getOutputStream());
-			
 		} catch (IOException e) {
 			utils.errorMsg("Error when getting IO stream of new client");
 		}
@@ -78,8 +77,12 @@ public class CClientHandler extends Thread {
 				if(!CClientPacket.checkPacket(msg)) continue;
 				
 				// Packet in Einzelteile zerlegen
-				msg = msg.substring(0, length -2);
-				
+				//msg = msg.substring(0, length -2);
+				length = 0;
+				while((int)msg.charAt(length) != 0){
+					length++;
+				}
+				msg = msg.substring(0, length);
 				CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 				packet.handlePacket();
 				utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
@@ -110,7 +113,7 @@ public class CClientHandler extends Thread {
 				CServerPacket.sendMessage(msg, this, sender);
 			} else {
 				/*
-				 * Dieser Fall kann nur eintreten wenn der Server eine Nachricht senden möchte, die länger als
+				 * Dieser Fall kann nur eintreten wenn der Server eine Nachricht senden mï¿½chte, die lï¿½nger als
 				 * (256 Zeichen - Laenge der Nachrichtenlaenge [3] - Laenge der Laenge des Senderusernames [2] - Laenge des Senderusernames) ist
 				 */
 				while(msg.length() > MAX_MESSAGE_LENGTH){
@@ -127,12 +130,11 @@ public class CClientHandler extends Thread {
 	public void onMessageReceived(String message){
 		if(message.startsWith("/join ")){
 			/*
-			 * Fall: /join zum Betreten eines anderen Channels wird ausgeführt.
+			 * Fall: /join zum Betreten eines anderen Channels wird ausgefï¿½hrt.
 			 */
 			Scanner sc = new Scanner(message.substring(5));
 			if(sc.hasNext() ){
 				String channelName = sc.next();
-				System.out.println(channelName);
 				CChannel channelToJoin = mServer.getChannel(channelName);
 				if(channelToJoin != null){
 					mClient.setCurrentChannel(channelToJoin);
@@ -145,7 +147,7 @@ public class CClientHandler extends Thread {
 			sc.close();
 		} else{
 			/*
-			 * Fall: Kein Befehl wird ausgeführt.
+			 * Fall: Kein Befehl wird ausgefï¿½hrt.
 			 * Aktion: Alle Clients im Channel holen die Nachricht senden mit dem Absender des eigenen Users 
 			 */
 			ArrayList<CClientHandler> clientsInSameChannel = mServer.getClientsOfChannel(mClient.getCurrentChannel());
