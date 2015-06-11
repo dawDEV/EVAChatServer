@@ -142,7 +142,6 @@ public class CClientPacket {
 		 */
 		if(mPacket.length() != MIN_PACKET_LENGTH) return;
 		mParameters.add(mPacket.substring(posPointer+2, posPointer + 2 + param2Length));
-		System.out.println(posPointer+2);
 		switch(type){
 			case LOGIN_TYPE:
 				perform_login();
