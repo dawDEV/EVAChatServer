@@ -28,7 +28,7 @@ public class CClientHandler extends Thread {
 		mServer = server;
 		mSocket = socket;
 		try {
-			mSocket.setSoTimeout(100000000);
+			mSocket.setSoTimeout(10000);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
 		}
@@ -58,37 +58,43 @@ public class CClientHandler extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			while(true){
-				char buffer[] = new char[256];
-				int length = 0;
-				length = mInput.read(buffer, 0, 256);
+		while(true){
+			try {
 				
-				/* length = -1 => Nutzer hat die Verbindung getrennt.
-				 * length >= 1 => Nachrichten stehen an.
-				 */
-				if(length == -1){
+					char buffer[] = new char[256];
+					int length = 0;
+					length = mInput.read(buffer, 0, 256);
+					
+					/* length = -1 => Nutzer hat die Verbindung getrennt.
+					 * length >= 1 => Nachrichten stehen an.
+					 */
+					if(length == -1){
+						notifyDisconnect();
+						return;
+					}
+					String msg = String.valueOf(buffer);
+					
+					// Packetstruktur pruefen
+					if(!CClientPacket.checkPacket(msg)) continue;
+					
+					// Packet in Einzelteile zerlegen
+					//msg = msg.substring(0, length -2);
+					length = 0;
+					while((int)msg.charAt(length) != 0){
+						length++;
+					}
+					msg = msg.substring(0, length);
+					CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
+					packet.handlePacket();
+					utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
+			} catch (IOException e) {
+				// Pruefen ob die Exception geworfen wurde weil der Timeout einfach erreicht wurde oder weil die Verbindung tot ist.
+				mOutput.println();
+				if(mOutput.checkError()){
 					notifyDisconnect();
 					return;
 				}
-				String msg = String.valueOf(buffer);
-				
-				// Packetstruktur pruefen
-				if(!CClientPacket.checkPacket(msg)) continue;
-				
-				// Packet in Einzelteile zerlegen
-				//msg = msg.substring(0, length -2);
-				length = 0;
-				while((int)msg.charAt(length) != 0){
-					length++;
-				}
-				msg = msg.substring(0, length);
-				CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
-				packet.handlePacket();
-				utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
-			}	
-		} catch (IOException e) {
-			notifyDisconnect();
+			}
 		}
 	}
 
@@ -146,6 +152,7 @@ public class CClientHandler extends Thread {
 			}
 			sc.close();
 		} else{
+			System.out.println("OMG");
 			/*
 			 * Fall: Kein Befehl wird ausgef�hrt.
 			 * Aktion: Alle Clients im Channel holen die Nachricht senden mit dem Absender des eigenen Users 
