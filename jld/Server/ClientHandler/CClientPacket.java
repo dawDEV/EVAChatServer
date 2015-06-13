@@ -191,8 +191,8 @@ public class CClientPacket {
 				}
 			}
 			// Alles ok!
-			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 			new CServerPacket(CServerPacketHeaders.LOGIN_SUCCESSFUL).sendPacket(mCaller);
+			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");
 		} else{
 			// Login falsch

@@ -119,7 +119,7 @@ public class CClientHandler extends Thread {
 				CServerPacket.sendMessage(msg, this, sender);
 			} else {
 				/*
-				 * Dieser Fall kann nur eintreten wenn der Server eine Nachricht senden m�chte, die l�nger als
+				 * Dieser Fall kann nur eintreten wenn der Server eine Nachricht senden moechte, die laenger als
 				 * (256 Zeichen - Laenge der Nachrichtenlaenge [3] - Laenge der Laenge des Senderusernames [2] - Laenge des Senderusernames) ist
 				 */
 				while(msg.length() > MAX_MESSAGE_LENGTH){
@@ -151,8 +151,13 @@ public class CClientHandler extends Thread {
 				sendMessage("Benutzung: /join [Channelname]", mServer.getServerClient());
 			}
 			sc.close();
+			
+		} else if(message.startsWith("/mychannel")){
+			/*
+			 * Fall: /mychannel zum erfragen des eigenen Channels
+			 */
+			sendMessage(mClient.getCurrentChannel().getName(), mServer.getServerClient());
 		} else{
-			System.out.println("OMG");
 			/*
 			 * Fall: Kein Befehl wird ausgef�hrt.
 			 * Aktion: Alle Clients im Channel holen die Nachricht senden mit dem Absender des eigenen Users 

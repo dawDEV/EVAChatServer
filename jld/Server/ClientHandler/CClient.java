@@ -1,6 +1,7 @@
 package jld.Server.ClientHandler;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import jld.Server.Channels.CChannel;
 
@@ -12,6 +13,7 @@ public class CClient {
 	private InetAddress mIp;
 	private CChannel mCurrentChannel;
 	private boolean mValid = false;
+	private CClientHandler mHandler;
 
 	public boolean isValid() {
 		return mValid;
@@ -20,6 +22,7 @@ public class CClient {
 	public CClient(String username, InetAddress ip, CClientHandler clienthandler) {
 		mUsername = username;
 		mIp = ip;
+		mHandler = clienthandler;
 		if((username != null) && (ip != null) && clienthandler != null){
 			mValid = true;
 			setCurrentChannel(clienthandler.getServer().getDefaultChannel());
