@@ -50,6 +50,19 @@ public class CClient {
 			mCurrentChannel = channel;
 			channel.joinChannel(this);
 		}
+		ArrayList<CClientHandler> clients = mHandler.getServer().getClientsOfChannel(mCurrentChannel);
+		StringBuilder users = new StringBuilder("");
+		for(int i = 0; i < clients.size(); i++){
+			final int MAX_LENGTH = 230;
+			// eigenen Client NICHT mit uebertragen
+			if(clients.get(i).getClient() == this) continue;
+			if(users.length() + clients.get(i).getClient().getUsername().length() >= MAX_LENGTH){
+				mHandler.sendMessage("inChannel" + users.toString(), mHandler.getServer().getServerClient());
+				users = new StringBuilder("");
+			}
+			users.append(" " + clients.get(i).getClient().getUsername());
+		}
+		mHandler.sendMessage("inChannel" + users.toString(), mHandler.getServer().getServerClient());
 	}
 	
 	public void disconnect(){

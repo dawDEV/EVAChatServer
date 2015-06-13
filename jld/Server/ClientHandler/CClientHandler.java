@@ -28,7 +28,7 @@ public class CClientHandler extends Thread {
 		mServer = server;
 		mSocket = socket;
 		try {
-			mSocket.setSoTimeout(10000);
+			mSocket.setSoTimeout(3000);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
 		}

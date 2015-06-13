@@ -175,6 +175,7 @@ public class CClientPacket {
 		} else return false;
 	}
 	
+	@SuppressWarnings("static-access")
 	private void perform_login(){
 		final String username = mParameters.get(0);
 		final String password = mParameters.get(1);
@@ -192,6 +193,11 @@ public class CClientPacket {
 			}
 			// Alles ok!
 			new CServerPacket(CServerPacketHeaders.LOGIN_SUCCESSFUL).sendPacket(mCaller);
+			try {
+				// Kleine Wartezeit, damit das Paket definitiv übertragen wurde
+				mCaller.sleep(250);
+			} catch (InterruptedException e) {
+			}
 			mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 			utils.infoMsg("User " + mCaller.getClient().getUsername() + " just logged in from " + mIpOfClient.toString() + "!");
 		} else{
