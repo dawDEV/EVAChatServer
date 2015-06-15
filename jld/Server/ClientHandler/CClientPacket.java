@@ -221,11 +221,11 @@ public class CClientPacket {
 					 */
 					userfile.createNewFile();
 					PrintWriter userfileWriter = new PrintWriter(userfile);
-					mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 					userfileWriter.println(mParameters.get(1));
 					userfileWriter.flush();
 					userfileWriter.close();
 					new CServerPacket(CServerPacketHeaders.REGISTER_SUCCESSFUL).sendPacket(mCaller);
+					mCaller.setClient(new CClient(mParameters.get(0), mIpOfClient, mCaller));
 					utils.infoMsg("User " + mCaller.getClient().getUsername() + " just registered from " + mIpOfClient.toString() + "!");
 				} catch (IOException e) {
 					e.printStackTrace();

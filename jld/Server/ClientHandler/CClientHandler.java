@@ -89,7 +89,7 @@ public class CClientHandler extends Thread {
 					utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
 			} catch (IOException e) {
 				// Pruefen ob die Exception geworfen wurde weil der Timeout einfach erreicht wurde oder weil die Verbindung tot ist.
-				mOutput.println();
+				mOutput.print(((char)0));
 				if(mOutput.checkError()){
 					notifyDisconnect();
 					return;

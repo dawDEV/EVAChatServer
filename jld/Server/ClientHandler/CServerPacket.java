@@ -24,7 +24,7 @@ public class CServerPacket {
 		// Siehe Packet Structure (MAX_PACKET_LENGTH - PacketHeader - Parameter1_laenge_laenge - Parameter1_laenge - Parameter2_laenge_laenge)
 		final int MAX_MESSAGE_LENGTH = 245 - sender.getUsername().length();
 		if(message.length() > MAX_MESSAGE_LENGTH) throw new InvalidPacketException();
-		receiver.getOutput().print("0x0004" + makeValidUserParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidMessageParameterLength(message.length()) + message);
+		receiver.getOutput().println("0x0004" + makeValidUserParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidMessageParameterLength(message.length()) + message);
 		receiver.getOutput().flush();
 	}
 	
