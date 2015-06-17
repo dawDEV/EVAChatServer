@@ -134,7 +134,7 @@ public class CClientHandler extends Thread {
 	}
 	
 	public void onMessageReceived(String message){
-		if(message.startsWith("/join ")){
+		if(message.startsWith("/join")){
 			/*
 			 * Fall: /join zum Betreten eines anderen Channels wird ausgef�hrt.
 			 */
