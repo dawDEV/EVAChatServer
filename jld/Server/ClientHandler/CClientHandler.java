@@ -1,5 +1,6 @@
 package jld.Server.ClientHandler;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,11 +8,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import jld.Exceptions.InvalidPacketException;
 import jld.Server.CServer;
 import jld.Server.Channels.CChannel;
+import jld.Server.utils.CCommand;
 import jld.Server.utils.utils;
 
 /**
@@ -23,12 +26,20 @@ public class CClientHandler extends Thread {
 	private BufferedReader mInput;
 	private PrintWriter mOutput;
 	private CClient mClient = null;
+	private static LinkedList<CCommand> mCommands = new LinkedList<CCommand>();
 
 	public CClientHandler(CServer server, Socket socket) {
+		if(mCommands.isEmpty()){
+			// Belegt die Liste erst, wenn der erste Nutzer verbindet. Damit spart man minimal RAM.
+			registerCommand("/join", "/join #channelname um einem Channel beizutreten.");
+			registerCommand("/mychannel", "Gibt den aktuellen Channel zurück.");
+			registerCommand("/help", "Zeigt die Hilfe.");
+		}
 		mServer = server;
 		mSocket = socket;
 		try {
 			mSocket.setSoTimeout(3000);
+			mSocket.setTcpNoDelay(false);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
 		}
@@ -133,6 +144,10 @@ public class CClientHandler extends Thread {
 		}
 	}
 	
+	private void registerCommand(String command, String helpText){
+		mCommands.add(new CCommand(command, helpText));
+	}
+	
 	public void onMessageReceived(String message){
 		if(message.startsWith("/join")){
 			/*
@@ -157,6 +172,24 @@ public class CClientHandler extends Thread {
 			 * Fall: /mychannel zum erfragen des eigenen Channels
 			 */
 			sendMessage(mClient.getCurrentChannel().getName(), mServer.getServerClient());
+		} else if(message.startsWith("/help")){
+			/*
+			 * Fall: /mychannel zum erfragen des eigenen Channels
+			 */
+			String helpText = "Folgende Befehle stehen Ihnen zur Verfügung:";
+			try {
+				// Sleeping um die Uebertragung zu garantieren. 100ms reichen dazu im Prinzip locker aus.
+				sendMessage(helpText, mServer.getServerClient());
+				this.sleep(50);
+				for(CCommand command : mCommands){
+					sendMessage(command.getCommand() + ": " + command.getHelpText(), mServer.getServerClient());
+					this.sleep(100);
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		} else{
 			/*
 			 * Fall: Kein Befehl wird ausgef�hrt.
