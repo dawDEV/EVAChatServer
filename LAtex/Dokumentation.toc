@@ -1,0 +1,5 @@
+\select@language {ngerman}
+\contentsline {section}{\numberline {1}Einleitung}{3}{section.1}
+\contentsline {section}{\numberline {2}Klassenerkl\IeC {\"a}rungen}{4}{section.2}
+\contentsline {section}{\numberline {3}Installation}{6}{section.3}
+\contentsline {section}{\numberline {4}Hinzuf\IeC {\"u}gen eines neuen Befehls}{6}{section.4}

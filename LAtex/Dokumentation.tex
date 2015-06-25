@@ -1,0 +1,222 @@
+%Einfache Vorlage fÅžr eine mit Latex realisierte Hausarbeit von http://www.studieren-info.de
+%Du kannst diese Vorlage fÅžr deine Hausarbeit beliebig anpassen%
+
+
+%-------------------
+%Beginn des Kopfbereiches
+%-------------------
+
+%Wir verwenden eine DIN-A4-Seite und die SchriftgrÅ¡Â§e 12.
+\documentclass[a4paper,12pt]{scrartcl} 
+
+
+%Diese drei Pakete benÅ¡tigen wir fÅžr die Umlaute, Deutsche Silbentrennung etc.
+%Apple-Nutzer sollten anstelle von \usepackage[latin1]{inputenc} das Paket \usepackage[applemac]{inputenc} verwenden
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+
+%Grafikpaket
+\usepackage{graphicx}
+
+%Syntax Highlighting
+\usepackage{listings}
+
+%Text um Bild flieÃen lassen
+\usepackage{wrapfig} 
+
+%Subsubsubsection alternative
+\usepackage[outermarks]{titlesec}
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}
+  {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}
+  {\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+
+\titlespacing*{\section}      {0pt}{3.5ex plus 1ex minus .2ex} {2.3ex plus .2ex}
+\titlespacing*{\subsection}   {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\paragraph}    {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\subparagraph} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% Farben definieren
+\usepackage{xcolor}
+\definecolor{codeGray}{RGB}{240,240,240}
+\definecolor{codeBlack}{RGB}{0,0,0}
+\definecolor{codeRed}{RGB}{221,0,0}
+\definecolor{codeBlue}{rgb}{0,0,187}
+\definecolor{codeYellow}{RGB}{255,128,0}
+\definecolor{codeGreen}{RGB}{0,119,0}
+
+% âŠ und zuweisen
+\lstset{%
+    language=PHP,%
+    %
+    % Farben, diktengleiche Schrift
+    backgroundcolor={\color{codeGray}},% 
+    basicstyle={\scriptsize\ttfamily\color{codeGreen}},% 
+    commentstyle={\color{codeYellow}},%
+    keywordstyle={\color{codeBlue}},%
+    stringstyle={\color{codeRed}},%
+    identifierstyle={\color{codeBlue}},%
+    %
+    % ZeilenumbrÃŒche aktivieren, Leerzeichen nicht hervorheben
+    breaklines=true,%
+    showstringspaces=false,%
+    % 
+    % Listing-Caption unterhalb (bottom)
+    captionpos=b,%
+    % 
+    % Listing einrahmen
+    frame=single,%
+    rulecolor={\color{codeBlack}},%
+}
+
+%Das Paket erzeugt ein anklickbares Verzeichnis in der PDF-Datei.
+\usepackage{hyperref}
+
+%Das Paket wird fÃŒr die anderthalb-zeiligen Zeilenabstand benÅ¡tigt
+\usepackage{setspace}
+
+%EinrÃŒckung eines neuen Absatzes
+\setlength{\parindent}{0em}
+
+%Definition der Rander
+\usepackage[paper=a4paper,left=30mm,right=30mm,top=30mm,bottom=30mm]{geometry} 
+
+%Abstand der FuÂ§noten
+\deffootnote{1em}{1em}{\textsuperscript{\thefootnotemark\ }}
+
+%Regeln, bis zu welcher Tiefe (section,subsection,subsubsection) â berschriften angezeigt werden sollen (Anzeige der â berschriften im Verzeichnis / Anzeige der Nummerierung)
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+%-------------------
+%Ende des Kopfbereiches
+%-------------------
+
+
+
+
+%-------------------
+%Hier beginnt der Text deiner Hausarbeit
+%-------------------
+\begin{document}
+
+
+%Beginn der Titelseite
+\begin{titlepage}
+\begin{small}
+\vfill {
+\begin{wrapfigure}{r}{0.4\textwidth}
+ \vspace{-16pt}
+ \centering 
+ \includegraphics[width=0.35\textwidth]{Bilder/hs_logo.png}
+ \vspace{-10pt}
+\end{wrapfigure}
+Hochschule Kaiserslautern\\ 
+Entwicklung verteilter Anwendungen in Java\\ 
+Sommersemester 2015}
+\end{small}
+
+
+\begin{center}
+\begin{Large}
+\vfill { \textsf{\textbf{
+Chat-Applikation auf Server- und Clientebene
+}}}
+\end{Large}
+\end{center}
+
+\begin{small}
+\vfill 868407 \\ Dorian Weidler, Luca Hartmuth, Julian Meisel \\
+\today
+\end{small}
+
+\end{titlepage}
+%Ende der Titelseite
+
+
+%Inhaltsverzeichnis (aktualisiert sich erst nach dem zweiten Setzen)
+\tableofcontents
+\thispagestyle{empty}
+
+%Beginn einer neuen Seite
+\clearpage
+
+%Anderthalbzeiliger Zeilenabstand ab hier
+\onehalfspacing
+
+\pagestyle{plain}
+
+
+\section{Einleitung}
+Ziel dieses Teilprojekts war es einen Multiuser-Server zu programmieren, der fehlerfrei Verbindungen mit mehreren Nutzern aufbaut, diese verwaltet und sie auch wieder abbaut.\\
+
+Eine weitere Anforderung war den Server so parallel zu gestalten wie möglich aber trotzdem so performant wie möglich. Resultat war, dass jedem User ein Thread zusteht, der beim Verbinden für ihn geöffnet wird. In diesem Thread werden all seine Aktionen (Login, Registration und Nachrichten, damit verbunden auch Befehle) abgearbeitet.\\
+
+Des Weiteren haben wir die persönliche Anforderung an das Client Teilprojekt gestellt, dass möglichst wenige Updates für den Endnutzer bereitgestellt werden müssen. Aus diesem Grund haben wir uns für eine rudimentäre GUI entschieden, die ein großes Textfeld für die empfangen und ein kleines Textfeld für die zu sendenden Nachrichten enthält. Außerdem befinden sich noch ein kleines Label auf dem GUI, das anzeigt in welchem Channel man sich befindet und eine Userliste mit den aktuell im Channel befindlichen Usern.\\
+
+Alle weiteren Aktionen, wie zum Beispiel das Ändern des aktuellen Channels, werden mittels Kommandos im Chat abgearbeitet. So sieht zum Beispiel der Befehl zum Ändern des aktuellen Channel wie folgt aus:
+\begin{lstlisting}[frame=single,caption=Beispiel eines Befehls]
+/join #channelname
+\end{lstlisting}
+Wir sahen darin einen mächtigen Vorteil, und zwar hat unserer Meinung nach der Serveradministrator mehr Kenntnisse bzgl. seines Computers als der Endanwender. Ihm sollte man die Updates zumuten können. Des Weiteren stellt sich das Verteilen der Updates auf eine Schar von Usern als deutlich schwerer heraus als des reine Verteilen auf die Server. Außerdem muss der Fall, dass ein Nutzer mit einer älteren Version mitchatten möchte, in aller Regel nicht beachtet werden. Sollte der Client doch einmal geupdated werden müssen, so muss dieser Fall natürlich gründlichst geprüft werden und ggf. durch weitere Änderungen im Serverquelltext ebenfalls abgedeckt werden.\\
+
+In unserem aktuellen Bestreben ist das Updaten des Funktionsumfangs eine einseitige Angelegenheit für den Anbieter des Servers und damit seine/n Administrator/en.
+
+\section{Klassenerklärungen}
+\begin{itemize}
+\item CMain: Das ist die Einstiegsklasse des Programms, sie liest mithilfe von CConfigParser die Konfigurationsdatei aus und gibt die nötigen Einstellungen an den Konstruktor der CServer Klasse weiter um ein solches Objekt zu erzeugen.
+\item CServer: Diese Klasse erbt von Thread und bekommt als Parameter im Konstruktor den Standard-Channelnamen und den Port auf dem der Chatserver horchen soll. Danach wird der Thread gestartet, indem ein Serversocket auf dem, in der Konfigurationsdatei angegebenen, Port öffnet, alle Channels aus der channels.lst mittels des CChannelParsers ausliest und auf eingehende Verbindungen wartet. Bei einer neuen Verbindung wird ein CClientHandler Objekt erzeugt und der Client zu den verbundenen Clients hinzugefügt. Daraufhin wartet der Server wieder auf neue Verbindungen.
+\item CClientHandler: Diese Klasse erbt ebenfalls von Thread. Im Konstruktor werden zunächst alle programmierten Befehle jeweils als CCommand Objekte angelegt, die den Befehl selbst und einen dazugehörigen Hilfetext beinhalten. Dann wird dem geöffnet Socket, d.h. der Verbindung zum Client, ein Timeout gesetzt, der dazu dient eine Exception zu werfen, wenn der Timeout ausläuft. Die Exception wird abgefangen und dabei geprüft ob die Verbindung noch besteht. Ist dem so, wird die Verbindung zum Client geschlossen und alle anderen Clients dementsprechend informiert. Der ClientHandler startet sich dann selbst als Thread und liest aus dem InputBuffer jeweils 256 Byte und prüft diese auf die Packet-Struktur. Stimmt sie wird das Paket entsprechend auf die nötige Länge beschnitten und ein CClientPacket Objekt damit erzeugt und darauf die handlePacket-Methode des Objekts aufgerufen. Dann liest er wieder aus.
+\item CClientPacket: Diese Klasse dient dazu, ein Packet zu prüfen, in seine Einzelteile zu zerlegen und dann entsprechend seines Typs zu behandeln. Zunächst werden dem Konstruktor das gesamte Packet als String, der aufrufende CClientHandler und die IP des verbundenen Clients. Aus dem gesamten Paket wird dann der Typ ausgelesen und als Objektattribut gesetzt. In der handlePacket()-Methode wird nun anhand des Typs geprüft was getan werden muss bzw. ob etwas getan werden muss. (Wird z.B. ein Login- oder Registerpacket von einem eingeloggten Client empfangen, wird dieses verworfen) In den entsprechenden Methoden processRegisterOrLoginPacket() (Behandelt beides, bekommt aber als Parameter ob es ein Login- oder Registerpacket ist, weil der Anfang gleich ist. Am Ende wird nur unterschieden ob ein Login gemacht werden muss oder eine Registration) oder processMessage() werden die Pakete dann entgültig zerlegt und ihre Einzelteile ausgewertet.
+\item CClient: Dient als Repräsentation des Clients auf dem Server. Diese Klasse dient eigentlich nur als Datenhalter. Die einzige richtige Methode der Klasse ist die setCurrentChannel()-Methode, die den Channel wächselt, dem Client ein entsprechendes MessagePaket schickt mit allen im neuen Channel befindlichen Clients und ruft die leaveChannel Methode beim aktuellen Channel für den Client auf und die joinChannel Methode beim neuen Channel.
+\item CChannel: Dient als Repräsentation eines Channels und bietet die Methoden joinChannel und leaveChannel die jeweils die Clients über neue User im Channel bzw. verlassende User informiert.
+\item CChannelParser: Liest die channels.lst aus und gibt ein Array aller Channels aus.
+\item CConfigParser: Liest die config.cfg aus und speichert die darin befindlichen Informationen als Objektattribute des Parsers. Diese können mittels der Getter Methoden ausgelesen werden.
+\item CServerPacket: Dient als Bauplan für Pakete die vom Server zu einem Client gesendet werden. Darin ist auch die sendMessage Methode, die einen Empfänger und einen Sender als Attribut bekommt. So können z.B. Private Nachrichten realisiert werden. Um eine Nachricht an alle zu schicken müsste einfach durch alle verbundenen Clients iteriert werden. Nur für Nachrichten ist weiteres außer dem Packetheader nötig. Alle anderen Pakete (Server -> Client) bestehen nur aus dem Packetheader.\\
+Mehr dazu erfahren Sie im Packet Structure Abschnitt.
+\item CServerPacketHeaders: Beinhaltet nur eine Methode um den Packetheader eines Serverpackets auf Gültigkeit zu prüfen.
+\item CLogger: Ist eine Hilfsklasse im in die angegebene Datei zu schreiben. Wird zum Beispiel in der utils Klasse benutzt um die Servernachrichten in die log.txt Datei zu schreiben.
+\item utils: Beinhaltet die Ausgabemethoden debugMsg, errorMsg und infoMsg und eine isNumber Methode um zu prüfen ob es sich bei einem String um eine valide Zahl handelt oder nicht. Die Ausgabemethode debugMsg() prüft dabei zunächst ob der Server aktuell im Debugmodus ausgeführt wird. Ist dem nicht der Fall, wird keine Ausgabe getätigt.
+\item Exceptions-Package: Enthält alle Exceptions.
+
+\section{Installation}
+Zur Installation muss lediglich das .zip Verzeichnis mit einem entsprechenden Programm entpackt werden und daraufhin die config.cfg nach eigenem Ermessen bearbeitet werden.
+\begin{lstlisting}[frame=single,caption=Beispielinhalt der Konfigurationsdatei]
+/join #channelnamePort = 1337
+QueueLength = 1500
+DefaultChannel = #default
+\end{lstlisting}
+Daraufhin muss noch die channels.lst bearbeitet werden. \textbf{Wichtig:} Der DefaultChannel aus der config.cfg \textbf{muss} dort nochmal stehen! Eine Zeile pro Channel!
+\begin{lstlisting}[frame=single,caption=Beispielinhalt der Channeldatei]
+#default
+#test
+\end{lstlisting}
+
+\section{Hinzufügen eines neuen Befehls}
+Dazu muss die onMessageReceived()-Methode entsprechend modifiziert werden. Dort sind bereits einige Befehle angelegt, die essentiell für die Funktionalität sind.\\
+
+Hier noch ein weiteres Beispiel, dass Sie theoretisch Copy\&Paste integrieren können.
+\begin{lstlisting}[frame=single,caption=Beispielinhalt der Channeldatei]
+		// Bei onMessageReceived in die If-Abfrage integrieren
+ 		else if(message.startsWith("/test")){
+			/* Fall: /test als Beispiel */
+			sendMessage("Testnachricht", mServer.getServerClient());			
+		}
+		/* Im Konstruktor den anderen registerCommand anhaengen. */
+		registerCommand("/test", "Dient als Beispiel."); 
+\end{lstlisting}
+Im Beispiel wird ein Befehl "/test" {eingefügt}, der dem User nur eine Nachricht "Testnachricht" mit dem Serverclient schickt.
+
+\end{itemize}
+\end{document}
+%-------------------
+%Hier endet der Text deiner Hausarbeit
+%-------------------
