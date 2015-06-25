@@ -177,17 +177,10 @@ public class CClientHandler extends Thread {
 			 * Fall: /mychannel zum erfragen des eigenen Channels
 			 */
 			String helpText = "Folgende Befehle stehen Ihnen zur Verfügung:";
-			try {
-				// Sleeping um die Uebertragung zu garantieren. 100ms reichen dazu im Prinzip locker aus.
-				sendMessage(helpText, mServer.getServerClient());
-				this.sleep(50);
-				for(CCommand command : mCommands){
-					sendMessage(command.getCommand() + ": " + command.getHelpText(), mServer.getServerClient());
-					this.sleep(100);
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			// Sleeping um die Uebertragung zu garantieren. 100ms reichen dazu im Prinzip locker aus.
+			sendMessage(helpText, mServer.getServerClient());
+			for(CCommand command : mCommands){
+				sendMessage(command.getCommand() + ": " + command.getHelpText(), mServer.getServerClient());
 			}
 			
 		} else{

@@ -4,7 +4,7 @@ import jld.Exceptions.InvalidPacketException;
 
 public class CServerPacket {
 	/* 
-	 * Es ist nur der Header noetig, alle Serverpakete zum Client, ausser der Nachricht, die über eine gesonderte statische Methode
+	 * Es ist nur der Header noetig, alle Serverpakete zum Client, ausser der Nachricht, die ï¿½ber eine gesonderte statische Methode
 	 * benutzt wird, sind 0-parametrig.
 	 */
 	private String mPacketHeader = "";
@@ -20,12 +20,18 @@ public class CServerPacket {
 		receiver.getOutput().flush();
 	}
 	
+	@SuppressWarnings("static-access")
 	public static void sendMessage(String message, CClientHandler receiver, CClient sender) throws InvalidPacketException{
 		// Siehe Packet Structure (MAX_PACKET_LENGTH - PacketHeader - Parameter1_laenge_laenge - Parameter1_laenge - Parameter2_laenge_laenge)
 		final int MAX_MESSAGE_LENGTH = 245 - sender.getUsername().length();
 		if(message.length() > MAX_MESSAGE_LENGTH) throw new InvalidPacketException();
 		receiver.getOutput().println("0x0004" + makeValidUserParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidMessageParameterLength(message.length()) + message);
 		receiver.getOutput().flush();
+		try {
+			// Damit die Nachrichten nicht zu schnell rausgeschickt werden.
+			receiver.sleep(100);
+		} catch (InterruptedException e) {
+		}
 	}
 	
 	private static String makeValidUserParameterLength(int length){
