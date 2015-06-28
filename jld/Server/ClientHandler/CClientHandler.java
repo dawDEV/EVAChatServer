@@ -1,6 +1,5 @@
 package jld.Server.ClientHandler;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,7 +70,6 @@ public class CClientHandler extends Thread {
 	public void run() {
 		while(true){
 			try {
-				
 					char buffer[] = new char[256];
 					int length = 0;
 					length = mInput.read(buffer, 0, 256);
@@ -88,8 +86,7 @@ public class CClientHandler extends Thread {
 					// Packetstruktur pruefen
 					if(!CClientPacket.checkPacket(msg)) continue;
 					
-					// Packet in Einzelteile zerlegen
-					//msg = msg.substring(0, length -2);
+					// Packet auf richtige Länge schneiden
 					length = 0;
 					while((int)msg.charAt(length) != 0){
 						length++;

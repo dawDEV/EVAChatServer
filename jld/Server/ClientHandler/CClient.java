@@ -41,6 +41,7 @@ public class CClient {
 		return mCurrentChannel;
 	}
 
+	@SuppressWarnings("static-access")
 	public void setCurrentChannel(CChannel channel) {
 		if(mCurrentChannel != null){
 			mCurrentChannel.leaveChannel(this);

@@ -86,7 +86,7 @@ public class CClientPacket {
 		MIN_PACKET_LENGTH += param1Length;
 		if(mPacket.length() < MIN_PACKET_LENGTH) return;
 		/*
-		 * Param1 zur Parameterliste hinzuf�gen
+		 * Param1 zur Parameterliste hinzufuegen
 		 */
 		mParameters.add(mPacket.substring(posPointer+MESSAGE_LENGTH_LENGTH, posPointer + MESSAGE_LENGTH_LENGTH + param1Length));
 		mCaller.onMessageReceived(mParameters.get(0));

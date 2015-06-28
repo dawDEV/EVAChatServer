@@ -9,6 +9,8 @@ public class CCommand {
 		mHelpText = helpText;
 	}
 	
+	// Damit man keinen Command erstellen kann ohne die Parameter zu nutzen
+	@SuppressWarnings("unused")
 	private CCommand(){}
 	
 	public String getCommand(){

@@ -34,7 +34,6 @@ public class CConfigParser {
 
 	private void readConfig(){
 		while(mReader.hasNext()){
-			//System.out.println(mReader.next());
 			String tag = mReader.next();
 			if(tag.equalsIgnoreCase("Port")){
 				mReader.next();
