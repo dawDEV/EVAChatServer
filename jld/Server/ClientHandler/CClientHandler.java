@@ -25,7 +25,10 @@ public class CClientHandler extends Thread {
 	private BufferedReader mInput;
 	private PrintWriter mOutput;
 	private CClient mClient = null;
+	private CHeartbeat mHBThread;
 	private static LinkedList<CCommand> mCommands = new LinkedList<CCommand>();
+	
+	private boolean stopThread = false;
 
 	public CClientHandler(CServer server, Socket socket) {
 		if(mCommands.isEmpty()){
@@ -37,7 +40,7 @@ public class CClientHandler extends Thread {
 		mServer = server;
 		mSocket = socket;
 		try {
-			mSocket.setSoTimeout(3000);
+			mSocket.setSoTimeout(1000);
 			mSocket.setTcpNoDelay(false);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
@@ -49,6 +52,7 @@ public class CClientHandler extends Thread {
 			utils.errorMsg("Error when getting IO stream of new client");
 		}
 		mClient = new CClient("", mSocket.getInetAddress(), null);
+		mHBThread = new CHeartbeat(this);
 		this.start();
 	}
 	
@@ -68,7 +72,7 @@ public class CClientHandler extends Thread {
 
 	@Override
 	public void run() {
-		while(true){
+		while(!stopThread){
 			try {
 					char buffer[] = new char[256];
 					int length = 0;
@@ -82,38 +86,45 @@ public class CClientHandler extends Thread {
 						return;
 					}
 					String msg = String.valueOf(buffer);
-					
-					// Packetstruktur pruefen
-					if(!CClientPacket.checkPacket(msg)) continue;
-					
-					// Packet auf richtige Länge schneiden
+					mHBThread.beatReceived();
+					// Packet auf richtige Lï¿½nge schneiden
 					length = 0;
 					while((int)msg.charAt(length) != 0){
 						length++;
 					}
+					// Packetstruktur pruefen
+					if(!CClientPacket.checkPacket(msg)) continue;
+					
 					msg = msg.substring(0, length);
+					
 					CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 					packet.handlePacket();
 					utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
 			} catch (IOException e) {
 				// Pruefen ob die Exception geworfen wurde weil der Timeout einfach erreicht wurde oder weil die Verbindung tot ist.
-				mOutput.print(((char)0));
+				mOutput.print(1);
+				mOutput.flush();
 				if(mOutput.checkError()){
 					notifyDisconnect();
+					try {
+						mSocket.close();
+					} catch (IOException e1) {
+					}
 					return;
 				}
 			}
 		}
-	}
-
-	private void notifyDisconnect() {
-		mClient.disconnect();
-		mServer.clientDisconnected(this);
 		try {
 			mSocket.close();
 		} catch (IOException e) {
-			utils.errorMsg("Error when closing socket is disconnected client");
 		}
+	}
+
+	protected void notifyDisconnect() {
+		stopThread = true;
+		mHBThread.stopThread();
+		mClient.disconnect();
+		mServer.clientDisconnected(this);
 	}
 	
 	public void sendMessage(String msg, CClient sender){
