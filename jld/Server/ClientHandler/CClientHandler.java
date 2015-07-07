@@ -86,19 +86,20 @@ public class CClientHandler extends Thread {
 						return;
 					}
 					String msg = String.valueOf(buffer);
+					// receiving beats
 					mHBThread.beatReceived();
-					// Packet auf richtige L�nge schneiden
+					// Packet auf richtige Laenge schneiden
 					length = 0;
 					while((int)msg.charAt(length) != 0){
 						length++;
 					}
 					// Packetstruktur pruefen
 					if(!CClientPacket.checkPacket(msg)) continue;
-					
 					msg = msg.substring(0, length);
-					
 					CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 					packet.handlePacket();
+					mOutput.print(1);
+					mOutput.flush();
 					utils.debugMsg("Got message (FROM: " + mSocket.getInetAddress() + ") -> " + msg);
 			} catch (IOException e) {
 				// Pruefen ob die Exception geworfen wurde weil der Timeout einfach erreicht wurde oder weil die Verbindung tot ist.
