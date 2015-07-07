@@ -40,7 +40,7 @@ public class CClientHandler extends Thread {
 		mServer = server;
 		mSocket = socket;
 		try {
-			mSocket.setSoTimeout(1000);
+			mSocket.setSoTimeout(300);
 			mSocket.setTcpNoDelay(false);
 		} catch (SocketException se) {
 			utils.errorMsg("Error when setting socket timeout of clientsocket");
@@ -90,7 +90,7 @@ public class CClientHandler extends Thread {
 					mHBThread.beatReceived();
 					// Packet auf richtige Laenge schneiden
 					length = 0;
-					while((int)msg.charAt(length) != 0){
+					while((int)msg.charAt(length) != 0 && length < 255){
 						length++;
 					}
 					// Packetstruktur pruefen

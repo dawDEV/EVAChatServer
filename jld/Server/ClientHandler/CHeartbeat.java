@@ -1,5 +1,7 @@
 package jld.Server.ClientHandler;
 
+import jld.Server.utils.utils;
+
 public class CHeartbeat extends Thread {
 	private CClientHandler mParent;
 	private boolean hbReceived = true;
@@ -14,6 +16,7 @@ public class CHeartbeat extends Thread {
 		try {
 			while(!stopThread){
 				if(!hbReceived){
+					utils.debugMsg("No HB from " + mParent.getClient().getUsername());
 					mParent.notifyDisconnect();
 					return;
 				}
