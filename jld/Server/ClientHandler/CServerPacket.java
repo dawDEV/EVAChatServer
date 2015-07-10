@@ -27,11 +27,12 @@ public class CServerPacket {
 		if(message.length() > MAX_MESSAGE_LENGTH) throw new InvalidPacketException();
 		receiver.getOutput().println("0x0004" + makeValidUserParameterLength(sender.getUsername().length()) + sender.getUsername() + makeValidMessageParameterLength(message.length()) + message);
 		receiver.getOutput().flush();
-		try {
+		// TODO Remove
+		/*try {
 			// Damit die Nachrichten nicht zu schnell rausgeschickt werden.
-			receiver.sleep(100);
+			//receiver.sleep(100);
 		} catch (InterruptedException e) {
-		}
+		}*/
 	}
 	
 	private static String makeValidUserParameterLength(int length){
