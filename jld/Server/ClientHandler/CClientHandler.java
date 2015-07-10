@@ -88,12 +88,6 @@ public class CClientHandler extends Thread {
 						return;
 					}
 					String msg = String.valueOf(buffer);
-					// Debug Ausgabe
-					if(!msg.startsWith("1")){
-						System.out.println("-----");
-						System.out.println(msg);
-						System.out.println("-----");
-					}
 					// receiving beats
 					mHBThread.beatReceived();
 					// Packet auf richtige Laenge schneiden
@@ -103,7 +97,6 @@ public class CClientHandler extends Thread {
 						sb.append(msg);
 						msg = sb.toString();
 						mRestMessage = "";
-						System.out.println("Rest: " + msg);
 					}
 					while(length < msg.length() && (int)msg.charAt(length) != 0){
 						length++;
@@ -111,7 +104,6 @@ public class CClientHandler extends Thread {
 					// Packetstruktur pruefen
 					if(!CClientPacket.checkPacket(msg)) continue;
 					msg = msg.substring(0, length);
-					System.out.println("Msg: " + msg);
 					CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 					packet.handlePacket();
 					mOutput.print(1);

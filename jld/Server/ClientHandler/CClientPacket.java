@@ -23,7 +23,6 @@ public class CClientPacket {
 	
 	public CClientPacket(String packet, CClientHandler callingHandler, InetAddress ipOfClient){
 		this.mPacket = packet;
-		System.out.println("Packet to Handle: " + packet);
 		this.mCaller = callingHandler;
 		this.mIpOfClient = ipOfClient;
 		setPacketType(packet.substring(0, 6));
@@ -60,7 +59,6 @@ public class CClientPacket {
 	}
 	
 	private void processMessage(){
-		System.out.println("Packet to handle 2: " + mPacket);
 		int MIN_PACKET_LENGTH = 9;	// Da 1-parametrig. (6 Digits + 3 Digits)
 		final int MESSAGE_LENGTH_LENGTH = 3;
 		if(mPacket.length() < MIN_PACKET_LENGTH) return;
