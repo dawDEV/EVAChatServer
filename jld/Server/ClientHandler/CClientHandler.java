@@ -29,6 +29,9 @@ public class CClientHandler extends Thread {
 	private static LinkedList<CCommand> mCommands = new LinkedList<CCommand>();
 	
 	private boolean stopThread = false;
+	
+	// Packet rest if two packets are received
+	private String mRestMessage = "";
 
 	public CClientHandler(CServer server, Socket socket) {
 		if(mCommands.isEmpty()){
@@ -77,7 +80,6 @@ public class CClientHandler extends Thread {
 					char buffer[] = new char[256];
 					int length = 0;
 					length = mInput.read(buffer, 0, 256);
-					
 					/* length = -1 => Nutzer hat die Verbindung getrennt.
 					 * length >= 1 => Nachrichten stehen an.
 					 */
@@ -86,16 +88,30 @@ public class CClientHandler extends Thread {
 						return;
 					}
 					String msg = String.valueOf(buffer);
+					// Debug Ausgabe
+					if(!msg.startsWith("1")){
+						System.out.println("-----");
+						System.out.println(msg);
+						System.out.println("-----");
+					}
 					// receiving beats
 					mHBThread.beatReceived();
 					// Packet auf richtige Laenge schneiden
 					length = 0;
-					while((int)msg.charAt(length) != 0 && length < 255){
+					if(!mRestMessage.equals("")){
+						StringBuilder sb = new StringBuilder(mRestMessage);
+						sb.append(msg);
+						msg = sb.toString();
+						mRestMessage = "";
+						System.out.println("Rest: " + msg);
+					}
+					while(length < msg.length() && (int)msg.charAt(length) != 0){
 						length++;
 					}
 					// Packetstruktur pruefen
 					if(!CClientPacket.checkPacket(msg)) continue;
 					msg = msg.substring(0, length);
+					System.out.println("Msg: " + msg);
 					CClientPacket packet = new CClientPacket(msg, this, mSocket.getInetAddress());
 					packet.handlePacket();
 					mOutput.print(1);
@@ -205,6 +221,15 @@ public class CClientHandler extends Thread {
 		}
 		
 		
+	}
+	
+	public String getRestMessage(){
+		return mRestMessage;
+	}
+	
+	public void setRestMessage(String restMessage){
+		assert(restMessage != null);
+		mRestMessage = restMessage;
 	}
 
 }
