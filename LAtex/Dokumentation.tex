@@ -199,6 +199,7 @@ Zur Installation muss lediglich das .zip Verzeichnis mit einem entsprechenden Pr
 QueueLength = 1500
 DefaultChannel = #default
 \end{lstlisting}
+Gegebenenfalls muss der Port noch für eingehende TCP Verbindungen in der Firewall geöffnet werden.\\
 Daraufhin muss noch die channels.lst bearbeitet werden. \textbf{Wichtig:} Der DefaultChannel aus der config.cfg \textbf{muss} dort nochmal stehen! Eine Zeile pro Channel!
 \begin{lstlisting}[frame=single,caption=Beispielinhalt der Channeldatei]
 #default
@@ -271,6 +272,15 @@ Enthält, wie der Name vermuten lässt, alle Exceptions.
 \item CUserErrorMessages: Ist eine Sammlung aller Fehlermeldungen, die dem User ausgegeben werden. Alle Meldungen werden in einem JOptionPane-ConfirmDialog ausgegeben.
 \item CUtils: Enthält aktuell nur Methoden, die die Länge auf den Längen-String im Packet parsen. (50 -> 050 bei Nachrichten, 9 -> 09 bei Login-/Registerpackets). Generell soll diese Klasse aber alle sonstigen hilfreichen Methoden umfassen, die irgendwo öfter gebraucht werden könnten.
 \end{itemize}
+
+\subsection{Installation}
+Zur Installation muss lediglich das .zip Verzeichnis mit einem entsprechenden Programm entpackt werden und daraufhin die config.cfg entsprechend der Serverdaten bearbeitet werden.
+\begin{lstlisting}[frame=single,caption=Beispielinhalt der Konfigurationsdatei]
+IP = 10.0.3.46
+Port = 1234
+\end{lstlisting}
+
+Gegebenenfalls muss der entsprechende Port für ausgehende TCP Verbindungen in der Firewall geöffnet werden.
 \clearpage
 
 \section{Funktionsweisen und Abläufe}
